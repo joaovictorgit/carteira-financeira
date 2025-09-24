@@ -7,5 +7,5 @@ export type User = {
   password?: string;
   balance: Prisma.Decimal;
   createdAt: Date;
-  updatedAt: Date;
+  updatedAt?: Date;
 }
