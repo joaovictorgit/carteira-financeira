@@ -10,7 +10,7 @@ CREATE TABLE "public"."User" (
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
-    "balance" MONEY NOT NULL DEFAULT 0,
+    "balance" INTEGER NOT NULL DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -20,7 +20,7 @@ CREATE TABLE "public"."User" (
 -- CreateTable
 CREATE TABLE "public"."Transaction" (
     "id" TEXT NOT NULL,
-    "amount" MONEY NOT NULL,
+    "amount" INTEGER NOT NULL,
     "type" "public"."TypeTransaction" NOT NULL DEFAULT 'TRANSFER',
     "status" "public"."TransactionStatus" NOT NULL DEFAULT 'PENDING',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
