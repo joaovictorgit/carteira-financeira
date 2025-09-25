@@ -55,6 +55,30 @@ export class UserController {
   }
 
   @UseGuards(AuthGuard)
+  @Get('names')
+  @ApiOperation({ description: 'Buscar usuário pelo id' })
+  async findUsers(
+    @Request() req,
+    @Res() res: Response
+  ) {
+    const userId = req['user'].user_id;
+
+    this.logger.log('Busca de usuários');
+
+    const result = await this.userService.findUsers(userId);
+
+    if (result.isError()) {
+      this.logger.error(result.error.message);
+
+      return res.status(HttpStatus.BAD_REQUEST).json(result.error.message);
+    }
+
+    this.logger.log('Usuários encontrados!');
+
+    return res.status(HttpStatus.OK).json(result.value);
+  }
+
+  @UseGuards(AuthGuard)
   @Put()
   @ApiOperation({ description: 'Atualizar usuário pelo id' })
   async updateUser(
