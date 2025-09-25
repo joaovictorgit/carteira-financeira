@@ -34,6 +34,27 @@ export class UserService {
     return new Result(newUser, null as any);
   }
 
+  async findUsers(id: string): Promise<Result<Array<{id: string, name: string}>, Error>> {
+    if (!id?.trim()) {
+      return new Result(null as any, new Error('Parâmetro id é obrigatório!'));
+    }
+
+    const users: {
+      id: string,
+      name: string,
+    }[] = await this.prisma.user.findMany({
+      where: {
+        NOT: { id }
+      },
+      select: {
+        id: true,
+        name: true,
+      }
+    });
+
+    return new Result(users, null as any);
+  }
+
   async findById(id: string): Promise<Result<User, Error>> {
     if (!id?.trim()) {
       return new Result(null as any, new Error('Parâmetro id é obrigatório!'));
