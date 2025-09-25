@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpStatus, Logger, Param, Post, Put, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Logger, Param, Post, Put, Request, Res, UseGuards } from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
 import type { Response } from 'express';
 
@@ -31,12 +31,17 @@ export class UserController {
   }
 
   @UseGuards(AuthGuard)
-  @Get(':id')
+  @Get()
   @ApiOperation({ description: 'Buscar usuário pelo id' })
-  async findUserById(@Param() params: { id: string }, @Res() res: Response) {
-    this.logger.log(`Busca de usuário pelo ID - ${params.id}`);
+  async findUserById(
+    @Request() req,
+    @Res() res: Response
+  ) {
+    const userId = req['user'].user_id;
 
-    const result = await this.userService.findById(params.id);
+    this.logger.log(`Busca de usuário pelo ID - ${userId}`);
+
+    const result = await this.userService.findById(userId);
 
     if (result.isError()) {
       this.logger.error(result.error.message);
@@ -50,17 +55,19 @@ export class UserController {
   }
 
   @UseGuards(AuthGuard)
-  @Put(':id')
+  @Put()
   @ApiOperation({ description: 'Atualizar usuário pelo id' })
   async updateUser(
-    @Param() params: { id: string },
     @Body() data: UpdateUserResource,
+    @Request() req,
     @Res() res: Response,
   ) {
-    this.logger.log(`Atualizar usuário pelo ID - ${params.id}`);
+    const userId = req['user'].user_id;
+
+    this.logger.log(`Atualizar usuário pelo ID - ${userId}`);
 
     const result = await this.userService.updateUser(
-      params.id,
+      userId,
       data,
     );
 
@@ -76,17 +83,19 @@ export class UserController {
   }
 
   @UseGuards(AuthGuard)
-  @Put(':id/password')
+  @Put('password')
   @ApiOperation({ description: 'Atualizar password do usuário' })
   async updatePassword(
-    @Param() params: { id: string },
     @Body() data: UpdateUserPasswordResource,
+    @Request() req,
     @Res() res: Response,
   ) {
-    this.logger.log(`Atualizar senha do usuário - ${params.id}`);
+    const userId = req['user'].user_id;
+
+    this.logger.log(`Atualizar senha do usuário - ${userId}`);
 
     const result = await this.userService.updatePassword(
-      params.id,
+      userId,
       data,
     );
 
