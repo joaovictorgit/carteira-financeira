@@ -71,7 +71,7 @@ JWT_SECRET="valor secret para rodar o jwt"
 ```
 
 ## Compilar e executar o projeto backend
-<h2 style="font-size: 20px;">OBS: Ambas as execuções necessitam que as variáveis de ambiente estejam criadas no arquivo <strong>.env</strong></h2>
+<h2 style="font-size: 15px;">OBS: Ambas as execuções necessitam que as variáveis de ambiente estejam criadas no arquivo <strong>.env</strong></h2>
 
 <h3 style="font-size: 18px;">💻 Executar Aplicação (Manual)</h3>
 
