@@ -28,6 +28,14 @@ export class UserService {
         email: user.email,
         name: user.name,
         password: hashPassword,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        balance: true,
+        createdAt: true,
+        updatedAt: true,
       }
     });
 
