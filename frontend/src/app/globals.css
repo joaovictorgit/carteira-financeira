@@ -1,26 +1,50 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+--background: hsl(250, 250%, 99%);
+--foreground: hsl(222, 15%, 15%);
+--card: hsl(0, 0%, 100%);
+--card-border: hsl(220, 13%, 91%);
+--primary: hsl(200, 95%, 35%);
+--primary-foreground: hsl(0, 0%, 98%);
+--success: hsl(140, 70%, 40%);
+--warning: hsl(35, 90%, 55%);
+--destructive: hsl(0, 75%, 55%);
+--muted: hsl(220, 15%, 96%);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+background-color: var(--background);
+color: var(--foreground);
+font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+font-weight: 500;
+}
+
+/* Custom classes for the WalletApp */
+.bg-gradient-card {
+background: linear-gradient(145deg, hsl(250, 250%, 99%), hsl(220, 15%, 96%));
+}
+
+.shadow-wallet {
+box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+.text-foreground {
+color: var(--foreground);
+}
+
+.text-muted-foreground {
+color: hsl(220, 15%, 46%);
+}
+
+.border-card-border {
+border-color: var(--card-border);
+}
+
+.text-primary-foreground {
+color: var(--primary-foreground);
+}
+
+.bg-primary {
+background-color: var(--primary);
 }
