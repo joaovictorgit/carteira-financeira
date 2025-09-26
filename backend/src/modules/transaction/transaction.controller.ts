@@ -1,8 +1,7 @@
 import type { Response } from 'express';
-import { Body, Controller, Get, HttpStatus, Logger, Param, Post, Put, Request, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Logger, Param, Post, Put, Query, Request, Res, UseGuards } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
 
-import { UserController } from '../user/user.controller';
 import { TransactionService } from './transaction.service';
 import { CreateTransactionResource } from '@/core/resources/transactionResources';
 import { AuthGuard } from '@/core/guards/auth.guard';
@@ -10,7 +9,7 @@ import { Decimal } from '@prisma/client/runtime/library';
 
 @Controller('transaction')
 export class TransactionController {
-  private readonly logger = new Logger(UserController.name);
+  private readonly logger = new Logger(TransactionController.name);
 
   constructor(private transactionService: TransactionService) {}
 
@@ -46,7 +45,7 @@ export class TransactionController {
   @Put(':transactionId')
   @ApiProperty({ description: 'Reverter transação' })
   async onReverteTransaction(
-    @Param() params: { transactionId },
+    @Param() params: { transactionId: string },
     @Res() res: Response,
   ) {
     this.logger.log(`Reverter a transação ${params.transactionId}`);
@@ -61,7 +60,7 @@ export class TransactionController {
 
     this.logger.log('Transação revertida');
 
-    return res.status(HttpStatus.OK).json('ok');
+    return res.status(HttpStatus.OK).json(result.value);
   }
 
   @UseGuards(AuthGuard)
@@ -69,13 +68,16 @@ export class TransactionController {
   @ApiProperty({ description: 'Retornar todas as transações do usuário' })
   async getAllTransactionsByUser(
     @Request() req,
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
     @Res() res: Response,
   ) {
     const userId = req['user'].user_id;
+    const paginationParams = { page, limit };
 
     this.logger.log(`Todas as transações do usuário: ${userId}`);
 
-    const result = await this.transactionService.getTransactionsByUser(userId);
+    const result = await this.transactionService.getTransactionsByUser(userId, paginationParams);
 
     if (result.isError()) {
       this.logger.error(result.error.message);

@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { Result } from '@/common/error/result';
 import { CreateTransactionResource } from '@/core/resources/transactionResources';
 import { PrismaService } from '@/database/prisma.service';
+import { PaginationParams, PaginationResult } from '@/utils/types/transaction';
 
 export interface PrismaTransactionClient {
   user: {
@@ -27,7 +28,6 @@ export class TransactionService {
     userId: string
   ): Promise<Result<Transaction, Error>> {
     const { receiverId, amount, type } = transaction;
-
     const senderId = type === $Enums.TypeTransaction.TRANSFER ? userId : null;
 
     if (amount <= 0) {
@@ -185,20 +185,32 @@ export class TransactionService {
     }
   }
 
-  async getTransactionsByUser(userId: string): Promise<Result<Transaction[], Error>> {
+  async getTransactionsByUser(userId: string, params: PaginationParams): Promise<Result<PaginationResult<Transaction>, Error>> {
     if (!userId?.trim()) {
       return new Result(null as any, new Error('ID do usuário é obrigatório!'));
     }
+    const requestedPage = parseInt(params.page as any) || 1;
+    const requestedLimit = parseInt(params.limit as any) || 10;
+
+    const page = requestedPage > 0 ? requestedPage : 1;
+    const limit = (requestedLimit > 0 && requestedLimit <= 50) ? requestedLimit : 10;
+    const skip = (page - 1) * limit;
+
+    const whereClause: Prisma.TransactionWhereInput = {
+      OR: [
+        { senderId: userId },
+        { receiverId: userId }
+      ]
+    };
 
     try {
+      const total = await this.prisma.transaction.count({ where: whereClause });
+
       const transactions = await this.prisma.transaction.findMany({
-        where: {
-          OR: [
-            { senderId: userId },
-            { receiverId: userId }
-          ]
-        },
+        where: whereClause,
         orderBy: { createdAt: 'desc' },
+        skip: skip,
+        take: limit,
         include: {
           sender: {
             select: {
@@ -217,8 +229,19 @@ export class TransactionService {
         }
       });
 
-      return new Result(transactions, null as any);
+      const last = Math.ceil(total / limit);
+
+      const paginatedResult: PaginationResult<Transaction> = {
+        items: transactions,
+        first: 1,
+        last: last,
+        total: total,
+        page: page,
+      };
+
+      return new Result(paginatedResult, null as any);
     } catch (error: any) {
+      console.error(error);
       return new Result(null as any, new Error('Erro ao buscar transações.'));
     }
   }

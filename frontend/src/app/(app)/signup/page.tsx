@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Wallet, Eye, EyeOff } from 'lucide-react';
-import toast from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 
 import { Card } from '@/components/form/card/card';
 import { CardHeader } from '@/components/form/card/card-header';
@@ -142,6 +142,8 @@ export default function SignUp() {
         </Card>
 
       </div>
+
+      <Toaster />
     </div>
   );
 }
