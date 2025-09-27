@@ -1,4 +1,4 @@
-import { User, Settings, LogOut } from 'lucide-react';
+import { User, LogOut } from 'lucide-react';
 import { Button } from '@/components/form/button';
 import {
   DropdownMenu,
@@ -33,7 +33,7 @@ export function Header({ user, title, subtitle }: HeaderProps) {
   };
 
   return (
-    <header className="bg-card border-b border-card-border px-6 py-4">
+    <header className="bg-white border-b border-card-border px-6 py-4">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-foreground">{title}</h1>
@@ -58,7 +58,7 @@ export function Header({ user, title, subtitle }: HeaderProps) {
                 </Avatar>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56" align="end" forceMount>
+            <DropdownMenuContent className="bg-white w-56" align="end" forceMount>
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
                   <p className="text-sm font-medium leading-none">{user.name}</p>
@@ -69,8 +69,10 @@ export function Header({ user, title, subtitle }: HeaderProps) {
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem>
-                <User className="mr-2 h-4 w-4" />
-                <span>Perfil</span>
+                <button className='flex items-center cursor-pointer' onClick={() => router.push('/dashboard/profile')}>
+                  <User className="mr-2 h-4 w-4" />
+                  <span>Perfil</span>
+                </button>
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <button className='flex items-center' onClick={handleLogout}>
