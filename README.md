@@ -57,10 +57,15 @@ cd ..
 cd frontend
 npm install
 ```
+# Backend
 
 ## Adicionando variáveis de ambiente
 
-<h3 style="font-size: 18px">⚙ Crie um arquivo <strong>.env</strong> na raiz do projeto</h3>
+```bash
+cd backend
+```
+
+<h3 style="font-size: 18px">⚙ Crie um arquivo <strong>.env</strong> na raiz da pasta</h3>
 
 ```bash
 DATABASE_URL="postgresql://username_do_seu_postgres:senha_do_seu_postgres@localhost:porta_do_postgres(5432)/wallet?schema=public"
@@ -95,3 +100,25 @@ docker-compose up --build
 # testes unitários
 npm run test
 ```
+
+# Frontend
+
+```bash
+cd frontend
+```
+
+<h3 style="font-size: 18px">⚙ Crie um arquivo <strong>.env.local</strong> na raiz da pasta e adicione exatamente assim</h3>
+
+```bash
+NEXT_PUBLIC_BASE_URL=http://localhost:3000/api/
+```
+
+<h3 style="font-size: 18px;">💻 Executar Aplicação (Manual)</h3>
+
+```bash
+npm run dev
+```
+
+<h3 style="font-size: 18px;">💻 Acessando aplicação Web</h3>
+
+<h4>Digite no navegador: <strong>http://localhost:5000/</strong></h4>
