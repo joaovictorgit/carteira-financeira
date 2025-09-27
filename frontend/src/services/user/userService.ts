@@ -6,6 +6,11 @@ type CreateUserPayload = {
   password: string,
 }
 
+type UpdateUserPayload = {
+  name: string;
+  email: string;
+}
+
 export type UserResponse = {
   id: string;
   name: string;
@@ -30,6 +35,12 @@ export const UserService = {
 
   getUserNames: async (): Promise<{id: string, name: string}[]> => {
     const response = await api.get('/user/names');
+
+    return response.data;
+  },
+
+  onUpdateUser: async (payload: UpdateUserPayload): Promise<UserResponse> => {
+    const response = await api.put('/user', payload);
 
     return response.data;
   }

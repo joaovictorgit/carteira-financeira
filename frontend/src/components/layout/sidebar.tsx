@@ -3,27 +3,33 @@
 import { 
   Home, 
   User, 
+  History,
   CreditCard,
 } from 'lucide-react';
 
+// Mock do Link do Next.js
+// Em um ambiente Next.js real, isso seria substituído por: import Link from 'next/link';
 const Link = ({ href, children, ...props }: any) => {
   return <a href={href} {...props}>{children}</a>;
 };
 
-const usePathname = () => {
-  if (typeof window === 'undefined') {
-    return '/'; 
-  }
-  return window.location.pathname;
-};
-
+// Mock da função cn
 const cn = (...classes: string[]) => {
   return classes.filter(Boolean).join(' ');
 };
 
-export function Sidebar() {
-  const pathname = usePathname();
+interface SidebarProps {
+  className?: string;
+  // Recebe o caminho atual do componente pai (DashboardLayout)
+  currentPath: string; 
+}
+
+export function Sidebar({ className, currentPath }: SidebarProps) {
+  // Usa a prop 'currentPath' que é atualizada pelo usePathname no layout
+  const pathname = currentPath; 
   
+  // Simplificado para itens de navegação de usuário padrão, 
+  // removendo a necessidade de isAdmin e do mockData.
   const navItems = [
     {
       title: 'Dashboard',
@@ -53,6 +59,7 @@ export function Sidebar() {
           <div className="space-y-1">
             {navItems.map((item) => {
               const isActive = pathname === item.href;
+
               return (
                 <Link
                   key={item.href}
